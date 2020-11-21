@@ -8,13 +8,25 @@ def read_img(img_path):
     img = cv2.imread(img_path, 0)
     dft = cv2.dft(np.float32(img), flags=cv2.DFT_COMPLEX_OUTPUT)
     dftshift = np.fft.fftshift(dft)
-    result = 20 * np.log(cv2.magnitude(dftshift[:, :, 0], dftshift[:, :, 1]))
+    amplitude = 20 * np.log(cv2.magnitude(dftshift[:, :, 0], dftshift[:, :, 1]))
+    w = np.shape(amplitude)[0]
+    h = np.shape(amplitude)[1]
+    w_center = np.floor(w / 2)
+    h_center = np.floor(h / 2)
+    n = 2
+    d0 = 30
+    hpf_result = np.empty((w, h), dtype=np.float32)
+    for i in range(w):
+        for j in range(h):
+            d = np.sqrt((i - w_center) ** 2 + (j - h_center) ** 2)
+            H = 1 / (1 + (d0 / d) ** (2 * n))
+            hpf_result[i, j] = H * amplitude[i, j]
     # plt.subplot(121), plt.imshow(img, cmap='gray')
     # plt.title('original'), plt.axis('off')
-    # plt.subplot(122), plt.imshow(result, cmap='gray')
+    # plt.subplot(122), plt.imshow(amplitude, cmap='gray')
     # plt.title('dft'), plt.axis('off')
     # plt.show()
-    return result
+    return hpf_result
 
 
 if __name__ == '__main__':
