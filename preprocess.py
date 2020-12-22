@@ -44,5 +44,5 @@ if __name__ == '__main__':
     plt.subplot(1, 3, 2), plt.imshow(blurred_img.astype(np.int32))
     plt.title('gaussian_blurred'), plt.axis('off')
     plt.subplot(1, 3, 3), plt.imshow(jpged_img)
-    plt.title('jpged'), plt.axis('off')
+    plt.title('jpeged'), plt.axis('off')
     plt.show()
